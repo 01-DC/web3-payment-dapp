@@ -17,15 +17,27 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 		type={type}
 		step="0.0001"
 		value={value}
-		onChange={() => handleChange(e, name)}
+		onChange={(e) => handleChange(e, name)}
 		className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
 	/>
 )
 
 const Welcome = () => {
-	const { connectWallet, currentAccount } = useContext(TransactionContext)
+	const {
+		connectWallet,
+		currentAccount,
+		formData,
+		sendTransactions,
+		handleChange,
+	} = useContext(TransactionContext)
 
-	const handleSubmit = () => {}
+	const handleSubmit = (e) => {
+		const { addressTo, amount, keyword, message } = formData
+
+		e.preventDefault()
+		if (!addressTo || !amount || !keyword || !message) return
+		sendTransactions()
+	}
 
 	return (
 		<div className="flex w-full justify-center items-center ">
@@ -93,30 +105,30 @@ const Welcome = () => {
 							placeholder="Address To"
 							name="addressTo"
 							type="text"
-							handleChange={() => {}}
+							handleChange={handleChange}
 						/>
 						<Input
 							placeholder="Amount (ETH)"
 							name="amount"
 							type="number"
-							handleChange={() => {}}
+							handleChange={handleChange}
 						/>
 						<Input
 							placeholder="Keyword (Gif)"
 							name="keyword"
 							type="text"
-							handleChange={() => {}}
+							handleChange={handleChange}
 						/>
 						<Input
 							placeholder="Enter Message"
 							name="message"
 							type="text"
-							handleChange={() => {}}
+							handleChange={handleChange}
 						/>
 
 						<div className="h-[1px] w-full bg-gray-400 my-2" />
 
-						{true ? (
+						{!currentAccount ? (
 							<Loader />
 						) : (
 							<button
